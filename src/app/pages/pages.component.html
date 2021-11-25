@@ -1,0 +1,34 @@
+
+<div id="main-wrapper">
+    <app-header></app-header>
+    <app-sidebar></app-sidebar>
+    
+    <div class="page-wrapper">
+      <div class="container-fluid">
+        
+        <!--Breadcrumbs-->
+        <app-breadcrumbs></app-breadcrumbs>
+  
+        <!--Mi sistema de rutas --> 
+        
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+  
+      <!-- footer -->
+      <footer class="footer">
+        © 2021 SM8 Versión Beta: 2.0.0.1 Soporte Técnico
+      </footer>
+      <!-- End footer -->
+  
+    </div>
+    
+  </div>
