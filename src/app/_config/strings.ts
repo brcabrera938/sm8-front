@@ -204,3 +204,36 @@ export const FORMS: any = {
     }
 
 };
+
+// Comentarios reusables
+export const GENERALES: any = {
+    'cargandoMenu': 'Cargando Menu...',
+    'queDeseaHacer': '¿Qué Desea Hacer?',
+    'algoOcurrio': 'Revisa tu conexión',
+    'editar': 'Editar',
+    'ver': 'Ver',
+    'borrar': 'Borrar',
+    'noTienePermisos': 'Lo sentimos pero no cuenta con los permisos para ver esta sección',
+    'logOut': ' Cerrar Sesion'
+};
+
+// Codigo de funcionalidad con rutas
+export const CODFUNC = [
+    { codFunc: 'CLIVER', nombre: 'Clientes (Documentacion)', url: 'listarClientes', icon: 'mdi-folder-account'},
+    { codFunc: 'CPAVER', nombre: 'Clientes Pre-autorizados', url: 'listarClientesPreautorizados', icon: 'mdi-account-minus' },
+    { codFunc: 'COTVER', nombre: 'Cotizaciones', url: 'cotizaciones', icon: 'mdi-pen'},
+    { codFunc: 'ORDVER', nombre: 'Orden de Trabajo', url: 'listarOrdenTrabajo', icon: 'mdi-factory'},
+    { codFunc: 'SLEVER', nombre: 'Solicitudes de existencias', url: 'listarSolicitudesExistencias', icon: 'mdi-format-list-bulleted'},
+    { codFunc: 'APOVER', nombre: 'Apoyos almacén', url: 'listarSolicitudesApoyo', icon: 'mdi-rotate-left-variant' },
+    { codFunc: 'COMVER', nombre: 'Cálculo de comisiones', url: 'comisiones', icon: 'mdi-calculator' },
+    { codFunc: 'ORPVER', nombre: 'Ordenes pendientes', url: 'listarClienteOrdenPendiente', icon: 'mdi-content-paste' },
+    { codFunc: 'ICIVER', nombre: 'Indicador', url: 'indicador', icon: 'mdi-format-italic' },
+    { codFunc: 'MALVER', nombre: 'Menú Almacén', url: 'menuAlmacen', icon: 'mdi-grid' },
+    { codFunc: 'MATVER', nombre: 'Material', url: 'material', icon: 'mdi-package-variant-closed' },
+    { codFunc: 'CINVER', nombre: 'Clientes y Kardex', url: 'listarClientesIntiza', icon: 'mdi-account-box' },
+    { codFunc: 'EVAVER', nombre: 'Evaluacion de personal', url: 'listarUsuariosEvaluacion', icon: 'mdi-clipboard-check' },
+    { codFunc: 'INCVER', nombre: 'Incidencias', url: 'asistencias', icon: 'mdi-account-alert' },
+    { codFunc: 'NCTVER', nombre: 'Cotizador', url: 'cotisaciones', icon: 'mdi-domain' },
+    { codFunc: 'SLTVER', nombre: 'Solicitud de Transferencia', url: 'solicitudTransferencias', icon: 'mdi-currency-usd' },
+    // { codFunc: 'LISEXIS'} ya no
+];

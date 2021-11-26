@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import {HttpClient, HttpHeaders, HttpResponse, HttpParams, HttpEventType} from '@angular/common/http';
 import { Router } from '@angular/router';
 
+import {Observable} from 'rxjs';
+
 
 
 import {API} from '../_config/strings';
@@ -12,7 +14,10 @@ import {API} from '../_config/strings';
 export class NetworkHelperService {
 
   private apiUrl: any;
-  
+  private rutaUrl: any;
+  private peticionString: any;
+  private token: string;
+
 
   constructor(
       private http: HttpClient, private router: Router
@@ -27,8 +32,30 @@ export class NetworkHelperService {
     body.append('username', usuario);
     body.append('password', password);
 
-    return this.http.post('http://25.86.12.90:8000/api/login_check', body, {observe: 'response'});
+    return this.http.post(this.apiUrl.url + this.apiUrl.login, body, {observe: 'response'});
 }// login
+
+//Se crea para iniciar a usar en listar clientes
+callSecureService(serviceUrl: string, method: string, jsonData: object | null): Observable<any> {
+
+  const cabeceras = {
+      headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.token),
+  };
+  if ( method == 'GET') {
+
+      return this.http.get(this.apiUrl.url + serviceUrl, cabeceras);
+  } else if (method == 'POST') {
+
+      return this.http.post(this.apiUrl.url + serviceUrl,
+          jsonData, {
+              headers: new HttpHeaders().set('Authorization', 'Bearer ' + this.token),
+              reportProgress: true,
+          }
+      );
+  }
+
+}// secureservice
+
 
 
 

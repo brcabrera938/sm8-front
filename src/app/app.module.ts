@@ -21,6 +21,8 @@ import { Login2Component } from './auth/login2/login2.component';
 import {NetworkHelperService } from './_services/network-helper.service';
 import { PagesComponent } from './pages/pages.component';
 import { FormsModule } from '@angular/forms';
+import { ListarClientesComponent } from './_components/cobranza/listar-clientes/listar-clientes.component';
+import { VerClienteComponent } from './_components/cobranza/ver-cliente/ver-cliente.component';
 
 
 
@@ -38,6 +40,8 @@ import { FormsModule } from '@angular/forms';
     SidebarComponent,
     Login2Component,
     PagesComponent,
+    ListarClientesComponent,
+    VerClienteComponent,
   ],
   imports: [
     BrowserModule,HttpClientModule,RouterModule,
