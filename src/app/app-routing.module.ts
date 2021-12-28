@@ -7,6 +7,7 @@ import { RegisterComponent } from './auth/register/register.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { NopagefoundComponent } from './pages/nopagefound/nopagefound.component';
 import { PagesComponent } from './pages/pages.component';
+import { ListarClientesComponent } from './_components/cobranza/listar-clientes/listar-clientes.component';
 
 const routes: Routes=[
   { path: '',
@@ -14,6 +15,7 @@ const routes: Routes=[
    children: [
     { path: 'dashboard', component: DashboardComponent },
     { path: 'login2', component: Login2Component},
+    { path: 'listarClientes', component: ListarClientesComponent, runGuardsAndResolvers: 'paramsChange'},
     { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
    ]
   },

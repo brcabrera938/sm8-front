@@ -1,1 +1,263 @@
-<p>listar-clientes works!</p>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Clientes</h4>
+                <div class="col-sm-12 col-lg-3 float-right">
+                    <button class="btn btn-block btn-secondary" data-toggle="modal" data-target="#informe">Informe de página</button>
+                </div>
+                <div id="botonCrearCliente">
+                    <button type="button" class="btn btn-block btn-secondary col-sm-12 col-lg-2 float-right " *ngIf="botonesPermisos.crearClie" routerLink="/dashboard/crearCliente">Crear Cliente</button>
+                    <!-- *ngIf="botonesPermisos.crearProd" routerLink="/dashboard/crearProducto" -->
+                </div>
+                <div class="table-responsive">
+                    <h4>Listado de clientes</h4>
+                    <table data-order='[[ 0, "desc" ]]' datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="m-1 pb-1  display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%">
+                        <thead>
+                            <tr style="text-align: center">
+                                <th></th>
+                                <!--
+                                <th>Id Cliente</th>
+                                -->
+                                <th>RFC</th>
+                                <th>Tipo cliente</th>
+                                <th>Nombre/RFC</th>
+                                <th>Estatus</th>
+                                <th>Atendido por :</th>
+                                <th>Sucursal</th>
+                                <th>Fecha de registro</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let cliente of clientesArray" style="text-align: center" (click)="clienteSeleccionado(cliente.idCliente)">
+                                <td>{{ cliente.id }}</td>
+                                <!--
+                                <td>{{ cliente.idCliente }}</td>
+                                -->
+                                <td>{{ cliente.rfc }}</td>
+                                <td>{{ cliente.clienteEMF }}</td>
+                                <td>{{ cliente.tipoCliente }}</td>
+                                <td style="text-align: left"><span class="label" [style.background]="cliente.estatusColor">{{ cliente.estatusNombre }}</span></td>
+                                <td>{{ cliente.atendido }}</td>
+                                <td>{{ cliente.sucursal }}</td>
+                                <td>{{ cliente.fechaCreacionDia }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ===== Busqueda de contratos por folio ===== -->
+                <div class="mt-5">
+                    <!-- *ngIf="boolBtnClienteComodin" -->
+                    <br />
+                    <h4>Buscar contratos por folio.</h4>
+                    <br />
+                    <label>Número de folio: </label>
+                    <input class="form-control" type="text" name="folio" style="width: 100px; text-align: center;" [(ngModel)]="buscarFolio">
+                    <button class="btn btn-success" type="button" (click)="buscarContratoXFolio()">Buscar</button>
+                    <hr>
+                </div>
+                <!-- ===== Busqueda de contratos por folio ===== -->
+                <div *ngIf="boolListadoClientes">
+                    <table data-order='[[ 0, "desc" ]]' datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger2" class="m-1 pb-1  display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%" id="tablaContratos">
+                        <thead>
+                            <tr style="text-align: center">
+                                <th>Id</th>
+                                <th>Nombre</th>
+                                <th>RFC</th>
+                                <th>Folio</th>
+                                <th>Sucursal</th>
+                                <th>Estatus Cliente</th>
+                                <th>Estatus Contrato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let ccFolio of arrayListadoDeContratosBXFolio" style="text-align: center" (click)="irAContrato(ccFolio.idCliente)">
+                                <td>{{ ccFolio.idCliente }}</td>
+                                <td>{{ ccFolio.nombre }}</td>
+                                <td>{{ ccFolio.rfc }}</td>
+                                <td>{{ ccFolio.folio }}</td>
+                                <td>{{ ccFolio.sucursal }}</td>
+                                <td style="text-align: left"><span class="label" [style.background]="ccFolio.estatusCliente.color">{{ ccFolio.estatusCliente.nombre }}</span></td>
+                                <td style="text-align: left"><span class="label" [style.background]="ccFolio.estatusContrato.color">{{ ccFolio.estatusContrato.nombre }}</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <!-- A Excel -->
+                <br />
+                <br />
+                <table class="m-1 pb-1  display nowrap table table-hover table-striped table-bordered" cellspacing="0" width="100%" id="tablaClientes" style="display: none;">
+                    <thead>
+                        <tr style="text-align: center">
+                            <!--
+                            <th>Razon Social</th>
+                            <th>Fecha de registro</th>
+                            <th>RFC</th>
+                            -->
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Sucursal</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let lsitClien of arrayListadoDeClientes" style="text-align: center">
+                            <!--
+                            <td>{{ lsitClien.razonSocial }}</td>
+                            <td>{{ lsitClien.fechaRegistro }}</td>
+                            <td>{{ lsitClien.rfc }}</td>
+                            -->
+                            <td>{{ lsitClien.nombre }}</td>
+                            <td>{{ lsitClien.email }}</td>
+                            <td>{{ lsitClien.sucursal }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br />
+                <!-- A Excel -->
+
+                <!-- Listado de contratos por folio -->
+                <div *ngIf="rol == 'ANALIS_CTRL_IN' || nombreUsuario == 'JuanS'">
+                    <h4>Listado de contratos por folio</h4>
+                    <br />
+                    <label>Selecciona la sucursal:</label>
+                    <select class="form-control" name="suc" style="width: 200px; margin-right: 20px;" [(ngModel)]="sucursal">
+                        <option *ngFor="let sucursal of arraySucursales">{{ sucursal }}</option>
+                    </select>
+                    <label>Rango inicio: </label>
+                    <input class="form-control" type="number" style="text-align: center; width: 70px; margin-right: 20px;" name="rangoI" [(ngModel)]="rangoInicio">
+                    <label>Rango final: </label>
+                    <input class="form-control" type="number" style="text-align: center; width: 70px; margin-right: 20px;" name="rangoF" [(ngModel)]="rangoFin">
+                    <button class="btn btn-success" (click)="listadoDeContratosPorRangoDeFolio()">Consultar</button>
+                    <br />
+                    <table data-order='[[ 0, "desc" ]]' datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger3" id="tablaRangoDeContratos" class="m-1 pb-1  display nowrap table table-hover table-striped table-bordered table-responsive" cellspacing="0" width="100%" style="display: none;">
+                        <thead>
+                            <tr style="text-align: center">
+                                <th>Folio</th>
+                                <th>Cliente</th>
+                                <th>Tipo de cliente</th>
+                                <th>Estatus</th>
+                                <th>Fecha de contrato</th>
+                                <th>Ir a</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let clienteFol of arrayContratosRangoFolio" style="text-align: center">
+                                <td>{{ clienteFol.rango }}</td>
+                                <td>{{ clienteFol.nombreCliente }}</td>
+                                <td>{{ clienteFol.tipoDeCliente }}</td>
+                                <td style="text-align: left">
+                                    <span class="label" [style.background]="clienteFol.estatusCliente.color">{{ clienteFol.estatusCliente.nombre }}</span>
+                                </td>
+                                <td>{{ clienteFol.fechaRegistroContrato }}</td>
+                                <td>
+                                    <button class="btn btnIrAVistas" type="button" *ngIf="clienteFol.idCliente !== 'Sin id'" (click)="DirDetallesCliente(clienteFol)">Cliente</button>
+                                    <button class="btn btnIrAVistas" type="button" *ngIf="clienteFol.idCliente !== 'Sin id'" (click)="DirDetallesContrato(clienteFol)">Contrato</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- Tabla para excel -->
+                    <table id="tablaClientesContratosExcel" style="display: none;">
+                        <thead>
+                            <tr>
+                                <th>Folio</th>
+                                <th>Cliente</th>
+                                <th>Tipo de cliente</th>
+                                <th>Estatus</th>
+                                <th>Fecha de contrato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let clienteFolExcel of arrayContratosRangoFolio">
+                                <td>{{ clienteFolExcel.rango }}</td>
+                                <td>{{ clienteFolExcel.nombreCliente }}</td>
+                                <td>{{ clienteFolExcel.tipoDeCliente }}</td>
+                                <td>{{ clienteFolExcel.estatusCliente.nombre }}</td>
+                                <td>{{ clienteFolExcel.fechaRegistroContrato }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <!-- Tabla para excel -->
+
+                    <button class="btn btnExcelExport" *ngIf="btnListadoClientesConContrato" (click)="exportTableToExcel('tablaClientesContratosExcel', 'clientesConContratos')">Exportar a excel</button>
+
+                </div>
+                <!-- Listado de contratos por folio -->
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================ -->
+<!-- ===== MODAL DE INFORME ===== -->
+<!-- ============================ -->
+<div class="modal fade" id="informe" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="float float-none">Acerca de los estatus</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table class="display nowrap table table-hover table-striped table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Estatus</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="text-align: left">
+                                    <span class="label" style="background-color: #00CCFF">PENDIENTE POR REVISAR</span>
+                                </td>
+                                <td>
+                                    El cliente ya creado, aún no ha sido revisado por el área de control interno.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left">
+                                    <span class="label" style="background-color: #ff8000">PRE-AUTORIZADO</span>
+                                </td>
+                                <td>
+                                    Es posible realizar un contrato, pero los documentos ya no pueden ser modificados.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left">
+                                    <span class="label" style="background-color: #FF0000">AUTORIZADO DOC. PEND.</span>
+                                </td>
+                                <td>
+                                    Es posible realizar un contrato y los documentos pueden ser modificados.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left">
+                                    <span class="label" style="background-color: #00cc00">AUTORIZADO</span>
+                                </td>
+                                <td>
+                                    Ha sido aprobado por las diferentes áreas.
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="text-align: left">
+                                    <span class="label" style="background-color: #978E8E">CANCELADO</span>
+                                </td>
+                                <td>
+                                    No se puede modificar pero la información no se pierde.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ============================ -->
+<!-- ===== MODAL DE INFORME ===== -->
+<!-- ============================ -->

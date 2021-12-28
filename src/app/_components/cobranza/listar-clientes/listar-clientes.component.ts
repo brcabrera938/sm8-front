@@ -17,7 +17,7 @@ import { Router } from '@angular/router';
 })
 export class ListarClientesComponent implements OnInit {
 
-  // dtOptions: DataTables.Settings = {};
+  dtOptions: DataTables.Settings = {};
   dtTrigger: Subject<any> = new Subject();
   dtTrigger2: Subject<any> = new Subject();
   dtTrigger3: Subject<any> = new Subject();
@@ -132,7 +132,7 @@ arraySucursales = ['Vallejo', 'Aguascalientes', 'Guadalajara', 'Puerto Vallarta'
   }
 
   inverse(){
-
+    this.clientesArrayReverse = this.clientesArray.reverse();
   }
 
   getPermisos(){
@@ -140,33 +140,62 @@ arraySucursales = ['Vallejo', 'Aguascalientes', 'Guadalajara', 'Puerto Vallarta'
   }
 
   seletedRowCliente(info: any){
-
+    
   }
 
-  clientesSeleccionado(id: any){
+  clienteSeleccionado(id: any){
 
   }
 
   mostrarBotones(){
-
+    const permisoCrearCliente = this.permisosArray.find( permiso => permiso === 'CLICREA' );
+    if (permisoCrearCliente) {
+        this.botonesPermisos.crearClie = true;
+        document.getElementById('botonCrearCliente').style.opacity = '1';
+    } else {
+        // Swal('Error', this.GENERALES.noTienePermisos, 'error');
+        // this.router.navigate(['/dashboard']);
+    }
   }
 
   listadoDeClientes(){
+    
+    const JSONSUCURSAL = {
+      sucursalNombre: this.sucursal
+  };
 
+  this.network.callSecureService(
+      'listado/clientes/comercial',
+      'POST',
+      JSONSUCURSAL
+  ).subscribe((response: any) => {
+      console.log(response);
+      this.arrayListadoDeClientes = response.Mensaje;
+  }, err => {
+      console.log(err);
+  });
   }
 
   buscarContratoXFolio(){
+    
+  }
+
+  irAContrato(idContrato){
+    this.router.navigate(['dashboard/verCliente/', idContrato, 'contratos' ]);
+  }
+
+  listadoDeContratosPorRangoDeFolio(){
 
   }
 
-  // irAContrato(idContrato){}
+  DirDetallesCliente(detallesCliente){
+    this.router.navigate(['dashboard/verCliente/', detallesCliente.idCliente ]);
+  }
 
-  listadoDeContratosPorRangoDeFolio(){}
+  DirDetallesContrato(detallesCliente){
+    this.router.navigate(['dashboard/verCliente/', detallesCliente.idCliente, 'contratos', detallesCliente.idContrato, 'abastecimiento' ]);
+  }
 
-  // DirDetallesCliente(detallesCliente){}
-
-  // DirDetallesContrato(detallesCliente){}
-
-  // exportTableToExcel(tableID, filename = ''){}
+  exportTableToExcel(tableID, filename = ''){}
 
 }

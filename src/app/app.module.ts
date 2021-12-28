@@ -24,7 +24,8 @@ import { FormsModule } from '@angular/forms';
 import { ListarClientesComponent } from './_components/cobranza/listar-clientes/listar-clientes.component';
 import { VerClienteComponent } from './_components/cobranza/ver-cliente/ver-cliente.component';
 
-
+// Plugins
+import { DataTablesModule } from 'angular-datatables';
 
 
 
@@ -47,6 +48,7 @@ import { VerClienteComponent } from './_components/cobranza/ver-cliente/ver-clie
     BrowserModule,HttpClientModule,RouterModule,
     AppRoutingModule,  //Agregamos este que es el modulo nuevo
     FormsModule,   //Se agrega para que funcione ngSubmit
+    DataTablesModule, //Para que funcione datatables
   ],
   providers: [
     NetworkHelperService,
