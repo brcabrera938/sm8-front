@@ -76,11 +76,20 @@ arraySucursales = ['Vallejo', 'Aguascalientes', 'Guadalajara', 'Puerto Vallarta'
     this.GENERALES = GENERALES;
     this.PAGE = PAGE;
     this.usuario = JSON.parse(localStorage.getItem('usuario'));
-    this.rol = this.usuario.rol;
-    this.nombreUsuario = this.usuario.userName;
+    // this.rol = this.usuario.rol;
+    // this.nombreUsuario = this.usuario.userName;
+
   }
 
   ngOnInit(){
+
+    this.getPermisos();
+   this.getClientes();
+   this.inverse();
+
+    //prueba para ver si guarda el usuario con el que se logea
+    //console.log(this.usuario);
+
   }
 
   getClientes(){
@@ -136,15 +145,41 @@ arraySucursales = ['Vallejo', 'Aguascalientes', 'Guadalajara', 'Puerto Vallarta'
   }
 
   getPermisos(){
+    const peticion = {
+      userId: this.usuario.userId,
+      codigoFuncionalidad: 'CLIVER'
+  };
 
+  this.network.callSecureService(
+      this.API.user.permisosFuncionalidad,
+      'POST',
+      peticion)
+      .subscribe((response: any) => {
+              this.permisosArray = response.Mensaje;
+              this.mostrarBotones();
+          }, err => {
+              console.log(err);
+             // Swal('Error', this.GENERALES.algoOcurrio, 'error');
+              this.mostrarBotones();
+          }
+      );
   }
 
-  seletedRowCliente(info: any){
+  selectedRowCliente(info: any){
     
+        // console.log(this.permisosArray.length);
+        const permisoVerCliente = this.permisosArray.find( permiso => permiso === 'CLIVER' );
+        if (permisoVerCliente) {
+            this.router.navigate(['dashboard/verCliente/', info ]);
+            // info[1]
+        } else {
+            //Swal('Error', this.GENERALES.noTienePermisos, 'error');
+        }
+        
   }
 
   clienteSeleccionado(id: any){
-
+    this.selectedRowCliente(id);
   }
 
   mostrarBotones(){

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NetworkHelperService } from 'src/app/_services/network-helper.service';
 import { FORMS, PAGE, API } from '../../_config/strings';
+
 //import Swal from 'sweetalert2';
 
 @Component({
@@ -20,7 +22,8 @@ export class LoginComponent implements OnInit {
 
 
   constructor( 
-     private networkService:NetworkHelperService,
+     private roter: Router,
+     private networkService: NetworkHelperService,
     ) {
 
       this.title = FORMS.login.title;
@@ -31,26 +34,26 @@ export class LoginComponent implements OnInit {
      }
 
   ngOnInit(){
+    this.networkService.logOut();
   }
 
   login(){
     this.loginLoader = true;
-    this.networkService.login(this.usuario, this.password).subscribe( (response: any) => {
-      console.log(response);
-        localStorage.setItem('user_token', response.body.token);
+ //Se cambio la estructura de la suscripcion para que subscribe no marcara error   
+    this.networkService.login(this.usuario, this.password).subscribe( 
+      {
+      next: (response: any) => {console.log(response);
+        localStorage.setItem('user_token', response.body.token);  
         // this.router.navigate(['dashboard']);
         // Para evitar caché, se redirecciona a la misma página
         location.href = '/dashboard';
-        }, err => {
-        this.loginLoader = false;
+      }, 
+       error: ()=> this.loginLoader = false,
         //Swal('Error', 'Usuario o Contraseña Incorrectos', 'error');
-        }
+      }
     );
 }
 
-entrar() {
-  console.log('Estoy entrando');
-}
 
 
 }

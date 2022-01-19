@@ -15,7 +15,7 @@ const routes: Routes=[
    children: [
     { path: 'dashboard', component: DashboardComponent },
     { path: 'login2', component: Login2Component},
-    { path: 'listarClientes', component: ListarClientesComponent, runGuardsAndResolvers: 'paramsChange'},
+    { path: 'listarClientes', component: ListarClientesComponent},
     { path: '', redirectTo: '/dashboard', pathMatch: 'full'},
    ]
   },
